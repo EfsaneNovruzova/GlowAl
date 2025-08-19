@@ -1,0 +1,6 @@
+@GlowAl.WebApi_HostAddress = http://localhost:5059
+
+GET {{GlowAl.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
