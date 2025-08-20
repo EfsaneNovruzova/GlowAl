@@ -10,6 +10,8 @@ public class CareProduct:BaseEntity
 
     public Guid? SkinTypeId { get; set; }
     public SkinType? SkinType { get; set; }
+    public Guid CategoryId { get; set; }
+    public Category Category { get; set; } = null!;
 
     public ICollection<ProductProblem> ProductProblems { get; set; } = new List<ProductProblem>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
