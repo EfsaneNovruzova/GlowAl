@@ -10,5 +10,12 @@ public class GlowAlDbContext : DbContext
     }
     
 
-    public DbSet<Article>  articles { get; set; }
+    public DbSet<Article>  Articles { get; set; }
+    public DbSet<AIQueryHistory> AIQueryHistories { get; set; }
+    public DbSet<CareProduct> CareProducts { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<ProductProblem> ProductProblems { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<SkinProblem> SkinProblems { get; set; }
+    public DbSet<SkinType> SkinTypes { get; set; }
 }
