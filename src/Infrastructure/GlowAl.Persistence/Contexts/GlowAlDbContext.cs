@@ -1,9 +1,10 @@
 ﻿using GlowAl.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GlowAl.Persistence.Contexts;
 
-public class GlowAlDbContext : DbContext
+public class GlowAlDbContext : IdentityDbContext<AppUser>
 {
     public GlowAlDbContext( DbContextOptions<GlowAlDbContext> options):base(options)
     {  
