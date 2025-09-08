@@ -6,6 +6,8 @@ using GlowAl.Persistence.Services;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using GlowAl.Application.Validations.UserValidations;
+using Microsoft.AspNetCore.Identity;
+using GlowAl.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,16 @@ builder.Services.AddDbContext<GlowAlDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+builder.Services.AddIdentity<AppUser , IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.User.RequireUniqueEmail = true;
 
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 3;
+})
+    .AddEntityFrameworkStores<GlowAlDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 if(app.Environment.IsDevelopment())
