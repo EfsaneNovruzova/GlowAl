@@ -18,4 +18,8 @@
     <ProjectReference Include="..\..\Infrastructure\GlowAl.Persistence\GlowAl.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
