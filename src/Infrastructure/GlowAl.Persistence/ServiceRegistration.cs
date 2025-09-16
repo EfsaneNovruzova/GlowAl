@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace GlowAl.Persistence.Services;
+
 
 public static class ServiceRegistration
 {
