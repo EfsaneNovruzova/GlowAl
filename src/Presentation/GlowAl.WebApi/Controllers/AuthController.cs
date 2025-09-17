@@ -17,7 +17,7 @@ namespace GlowAl.WebApi.Controllers
         {
             _authService = authService;
         }
-        [HttpPost]
+        [HttpPost("Register")]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.InternalServerError)]
@@ -26,8 +26,22 @@ namespace GlowAl.WebApi.Controllers
             var result = await _authService.Register(dto);
             return StatusCode((int)result.StatusCode, result);
         }
+        [HttpPost("login")]
+        [ProducesResponseType(typeof(BaseResponse<TokenResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Login([FromBody] AppUserLoginDto dto)
+        {
+            var result = await _authService.Login(dto);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
+
+
 
     }
 
-    
+
 }

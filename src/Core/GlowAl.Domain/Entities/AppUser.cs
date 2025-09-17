@@ -5,8 +5,8 @@ namespace GlowAl.Domain.Entities;
 public class AppUser : IdentityUser
 {
     public string FulName { get; set; } = null!;
-    public string RefreshToken { get; set; } = null!;
     public DateTime ExpiryDate { get; set; }
+    public string? RefreshToken { get; set; } 
     public Guid? SkinTypeId { get; set; }
     public SkinType? SkinType { get; set; }
 
