@@ -8,6 +8,10 @@ using FluentValidation;
 using GlowAl.Application.Validations.UserValidations;
 using Microsoft.AspNetCore.Identity;
 using GlowAl.Domain.Entities;
+using GlowAl.Application.Shared.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +38,33 @@ builder.Services.AddIdentity<AppUser , IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<GlowAlDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JWTSettings>();
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+            
+        };
+    });
+
+builder.Services.RegisterService();
 var app = builder.Build();
 if(app.Environment.IsDevelopment())
 {
@@ -45,6 +75,7 @@ if(app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
