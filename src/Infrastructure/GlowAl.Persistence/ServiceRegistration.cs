@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GlowAl.Application.Abstracts.Services;
+using GlowAl.Persistence.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 
 
@@ -10,6 +12,7 @@ public static class ServiceRegistration
 
         #endregion
         #region Servicies
+        services.AddScoped<IAuthService, AuthService>();
         #endregion
     }
 }
