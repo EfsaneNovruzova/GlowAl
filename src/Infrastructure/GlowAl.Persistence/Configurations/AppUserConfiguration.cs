@@ -15,8 +15,7 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(u => u.RefreshToken)
-                   .IsRequired(false);
+           
 
             builder.Property(u => u.ExpiryDate)
                    .IsRequired();
