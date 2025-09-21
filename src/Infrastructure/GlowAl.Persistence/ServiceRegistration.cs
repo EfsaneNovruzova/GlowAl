@@ -13,6 +13,9 @@ public static class ServiceRegistration
         #endregion
         #region Servicies
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAppUserService, AppUserService>();
+
         #endregion
     }
 }
