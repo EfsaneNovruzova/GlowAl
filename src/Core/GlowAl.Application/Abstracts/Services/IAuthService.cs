@@ -9,4 +9,5 @@ public interface IAuthService
     Task<BaseResponse<string>> Register(AppUserRegisterDto dto);
     Task<BaseResponse<TokenResponse>> Login(AppUserLoginDto dto);
     Task<BaseResponse<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request);
+   
 }

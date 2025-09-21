@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using GlowAl.Application.Abstracts.Services;
 using GlowAl.Application.DTOs.AppUserDtos;
+using GlowAl.Application.Shared;
 using GlowAl.Application.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GlowAl.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,7 +18,7 @@ namespace GlowAl.WebApi.Controllers
         {
             _authService = authService;
         }
-        [HttpPost("Register")]
+        [HttpPost]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.InternalServerError)]
@@ -26,7 +27,7 @@ namespace GlowAl.WebApi.Controllers
             var result = await _authService.Register(dto);
             return StatusCode((int)result.StatusCode, result);
         }
-        [HttpPost("login")]
+        [HttpPost]
         [ProducesResponseType(typeof(BaseResponse<TokenResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.BadRequest)]
@@ -36,7 +37,15 @@ namespace GlowAl.WebApi.Controllers
             var result = await _authService.Login(dto);
             return StatusCode((int)result.StatusCode, result);
         }
-
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseResponse<TokenResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest dto)
+        {
+            var result = await _authService.RefreshTokenAsync(dto);
+            return StatusCode((int)result.StatusCode, result);
+        }
 
 
 
