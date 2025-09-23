@@ -4,12 +4,14 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using GlowAl.Application.Abstracts.Services;
 using GlowAl.Application.DTOs.AppUserDtos;
 using GlowAl.Application.Shared;
 using GlowAl.Application.Shared.Responses;
 using GlowAl.Application.Shared.Settings;
 using GlowAl.Domain.Entities;
+using GlowAl.Infrastructure.Services;
 using GlowAl.Persistence.Migrations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -22,17 +24,21 @@ public class AuthService : IAuthService
 {
     private UserManager<AppUser> _usermanager { get;  }
     private SignInManager<AppUser> _signInManager { get; }
+    private IEmailService _emailService { get; }
     private JWTSettings _jwtsettings { get; }
     private RoleManager<IdentityRole> _roleManager { get; }
     public AuthService(UserManager<AppUser> userManage,
         SignInManager<AppUser>signInManager,
        IOptions <JWTSettings> jwtsettings,
-       RoleManager<IdentityRole> roleManager)
+       RoleManager<IdentityRole> roleManager,
+       IEmailService emailService)
     {
         _usermanager = userManage;
         _signInManager = signInManager;
         _jwtsettings = jwtsettings.Value;
         _roleManager = roleManager;
+        _emailService = emailService;
+        
     }
     public async Task<BaseResponse<string>> Register(AppUserRegisterDto dto)
     {
@@ -64,9 +70,9 @@ public class AuthService : IAuthService
             return new BaseResponse<string>(errorMessage.ToString(), HttpStatusCode.BadRequest);
         }
 
-        //string confirmEmailLink = await GetEmailConfirmlink(newUser);
-        //await _emailService.SendEmailAsync(new List<string> { newUser.Email }, "Email Confirmation",
-        //    confirmEmailLink);
+        string confirmEmailLink = await GetEmailConfirmlink(newUser);
+        await _emailService.SendEmailAsync(new List<string> { newUser.Email }, "Email Confirmation",
+            confirmEmailLink);
         return new("Successfully created", HttpStatusCode.Created);
     }
     public async Task<BaseResponse<TokenResponse>> Login(AppUserLoginDto dto)
@@ -77,10 +83,10 @@ public class AuthService : IAuthService
             return new("Emaail or Password is wrong.", null, HttpStatusCode.NotFound);
         }
 
-        //if (!existedUser.EmailConfirmed)
-        //{
-        //    return new("Pleace confirm your email", HttpStatusCode.BadRequest);
-        //}
+        if (!existedUser.EmailConfirmed)
+        {
+            return new("Pleace confirm your email", HttpStatusCode.BadRequest);
+        }
 
 
         SignInResult signInResult = await _signInManager.PasswordSignInAsync
@@ -253,7 +259,27 @@ public class AuthService : IAuthService
         }
         return null;
     }
+    private async Task<string> GetEmailConfirmlink(AppUser appuser)
+    {
+        var token = await _usermanager.GenerateEmailConfirmationTokenAsync(appuser);
+        var link = $"https://localhost:7241/api/Auth/ConfirmEmail?userId={appuser.Id}&token={HttpUtility.UrlEncode(token)}";
+        Console.WriteLine("Confirm emial"+link);
+        return link;
+    }
 
-   
 
+    public async Task<BaseResponse<string>> ConfirmEmail(string userId, string token)
+    {
+        var existedUser = await _usermanager.FindByIdAsync(userId);
+        if (existedUser is null)
+        {
+            return new("Email Confirmation Failed.", HttpStatusCode.NotFound);
+        }
+        var result = await _usermanager.ConfirmEmailAsync(existedUser, token);
+        if (!result.Succeeded)
+        {
+            return new("Email Confirmation Failed.", HttpStatusCode.BadRequest);
+        }
+        return new("Email Confirmation successfully.", HttpStatusCode.OK);
+    }
 }
