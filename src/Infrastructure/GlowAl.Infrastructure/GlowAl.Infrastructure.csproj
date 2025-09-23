@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\..\Core\GlowAl.Application\GlowAl.Application.csproj" />
   </ItemGroup>
 
 </Project>
