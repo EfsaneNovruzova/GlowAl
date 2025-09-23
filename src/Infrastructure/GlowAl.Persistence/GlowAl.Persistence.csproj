@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GlowAl.Application\GlowAl.Application.csproj" />
+    <ProjectReference Include="..\GlowAl.Infrastructure\GlowAl.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

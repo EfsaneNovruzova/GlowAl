@@ -1,4 +1,5 @@
 ﻿using GlowAl.Application.Abstracts.Services;
+using GlowAl.Infrastructure.Services;
 using GlowAl.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class ServiceRegistration
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAppUserService, AppUserService>();
+        services.AddScoped<IEmailService,EmailService>();
 
         #endregion
     }
