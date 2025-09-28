@@ -2,42 +2,90 @@
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace GlowAl.WebApi.Controllers
+using GlowAl.Application.Abstracts.Services;
+using GlowAl.Application.DTOs.CategoryDtos;
+using GlowAl.Application.Shared.Responses;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using GlowAl.Application.Shared;
+
+namespace GlowAl.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        // GET: api/<CategoriesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ICategoryService _categoryService;
+
+        public CategoriesController(ICategoryService categoryService)
         {
-            return new string[] { "value1", "value2" };
+            _categoryService = categoryService;
         }
 
-        // GET api/<CategoriesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<CategoriesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Policy = Permissions.Category.Create)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Add([FromBody] CategoryCreateDto dto)
         {
+            var response = await _categoryService.AddAsync(dto);
+            return StatusCode((int)response.StatusCode, response);
         }
 
-        // PUT api/<CategoriesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Policy = Permissions.Category.Update)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> Update(Guid id, [FromBody] CategoryUpdateDto dto)
         {
+            if (id != dto.Id)
+                return BadRequest(new BaseResponse<string>("Id mismatch", HttpStatusCode.BadRequest));
+
+            var response = await _categoryService.UpdateAsync(dto);
+            return StatusCode((int)response.StatusCode, response);
         }
 
-        // DELETE api/<CategoriesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Policy = Permissions.Category.Delete)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<string>), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> Delete(Guid id)
         {
+            var response = await _categoryService.DeleteAsync(id);
+            return StatusCode((int)response.StatusCode, response);
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var response = await _categoryService.GetByIdAsync(id);
+            return StatusCode((int)response.StatusCode, response);
+        }
+
+        [HttpGet("by-name/{search}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<CategoryGetDto>), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetByName(string search)
+        {
+            var response = await _categoryService.GetByNameAsync(search);
+            return StatusCode((int)response.StatusCode, response);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(BaseResponse<List<CategoryGetDto>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<List<CategoryGetDto>>), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _categoryService.GetAllAsync();
+            return StatusCode((int)response.StatusCode, response);
         }
     }
 }

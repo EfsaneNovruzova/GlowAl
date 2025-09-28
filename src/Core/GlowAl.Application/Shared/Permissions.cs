@@ -14,31 +14,30 @@ public class Permissions
         public const string Update = "Category.Update";
         public const string Delete = "Category.Delete";
 
-
         public static List<string> All = new()
         {
-           Create,
+            Create,
             Update,
             Delete,
         };
     }
-    public static class Product
+
+    public static class CareProduct
     {
-        public const string Create = "Product.Create";
-        public const string Update = "Product.Update";
-        public const string Delete = "Product.Delete";
-       
+        public const string Create = "CareProduct.Create";
+        public const string Update = "CareProduct.Update";
+        public const string Delete = "CareProduct.Delete";
+        public const string GetMy = "CareProduct.GetMy";
 
         public static List<string> All = new()
         {
             Create,
             Update,
             Delete,
-            
-
-
+            GetMy
         };
     }
+
     public static class Account
     {
         public const string AddRole = "Account.AddRole";
@@ -47,8 +46,8 @@ public class Permissions
 
         public static List<string> All = new()
         {
-              AddRole,
-              Create,
+            AddRole,
+            Create,
             GetAllUsers
         };
     }
@@ -62,10 +61,9 @@ public class Permissions
 
         public static List<string> All = new()
         {
-           Create,
+            Create,
             Update,
             Delete,
         };
-
     }
 }
