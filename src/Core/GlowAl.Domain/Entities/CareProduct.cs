@@ -1,15 +1,21 @@
 ﻿namespace GlowAl.Domain.Entities;
 
-public class CareProduct:BaseEntity
+public class CareProduct : BaseEntity
 {
     public string Name { get; set; } = null!;
     public string Brand { get; set; } = null!;
     public string Description { get; set; } = null!;
     public string Ingredients { get; set; } = null!;
-    public decimal Price { get; set; } = 0;
+    public decimal Price { get; set; }
 
+    public int Stock { get; set; } = 0;
+    public string ImageUrl { get; set; } = null!;
+    public double Rating { get; set; } = 0;
+    public int SalesCount { get; set; } = 0; 
+    public string CreatedByUserId { get; set; } = null!; 
     public Guid? SkinTypeId { get; set; }
     public SkinType? SkinType { get; set; }
+
     public Guid CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 
