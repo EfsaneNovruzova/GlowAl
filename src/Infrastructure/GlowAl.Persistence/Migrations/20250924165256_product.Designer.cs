@@ -4,6 +4,7 @@ using GlowAl.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GlowAl.Persistence.Migrations
 {
     [DbContext(typeof(GlowAlDbContext))]
-    partial class GlowAlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250924165256_product")]
+    partial class product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,10 +206,6 @@ namespace GlowAl.Persistence.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedUser")
                         .HasColumnType("nvarchar(max)");
 
@@ -231,9 +230,6 @@ namespace GlowAl.Persistence.Migrations
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
-
-                    b.Property<int>("SalesCount")
-                        .HasColumnType("int");
 
                     b.Property<Guid?>("SkinTypeId")
                         .HasColumnType("uniqueidentifier");
