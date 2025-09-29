@@ -79,4 +79,15 @@ public class Permissions
             Delete,
         };
     }
+    public static class Favorite
+    {
+        public const string Create = "Favorite.Create";
+        public const string Delete = "Favorite.Delete";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Delete,
+        };
+    }
 }

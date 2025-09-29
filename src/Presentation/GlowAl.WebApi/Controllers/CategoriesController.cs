@@ -6,7 +6,6 @@ using GlowAl.Application.Abstracts.Services;
 using GlowAl.Application.DTOs.CategoryDtos;
 using GlowAl.Application.Shared.Responses;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using GlowAl.Application.Shared;
 

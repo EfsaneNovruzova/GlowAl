@@ -19,4 +19,5 @@ public class GlowAlDbContext : IdentityDbContext<AppUser>
     public DbSet<Review> Reviews { get; set; }
     public DbSet<SkinProblem> SkinProblems { get; set; }
     public DbSet<SkinType> SkinTypes { get; set; }
+    public DbSet<Favorite> Favorite { get; set; }
 }
