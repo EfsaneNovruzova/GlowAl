@@ -66,4 +66,17 @@ public class Permissions
             Delete,
         };
     }
+    public static class Review
+    {
+        public const string Create = "Review.Create";
+        public const string Update = "Review.Update";
+        public const string Delete = "Review.Delete";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Update,
+            Delete,
+        };
+    }
 }

@@ -16,10 +16,6 @@ using Microsoft.OpenApi.Models;
 using GlowAl.Application.Shared.Helpers;
 using GlowAl.Application;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using GlowAl.Domain.Entities;
-using GlowAl.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddValidatorsFromAssembly(typeof(AppUserRegisterDtoValidator).Assembly);
