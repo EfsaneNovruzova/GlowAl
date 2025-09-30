@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace GlowAl.Application.Abstracts.Services
+namespace GlowAl.Application.AI
 {
-    internal class IAIService
+    public interface IAIService
     {
+        Task<string> SendMessageAsync(string prompt);
     }
 }
+
