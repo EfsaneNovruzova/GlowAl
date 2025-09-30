@@ -101,4 +101,17 @@ public class Permissions
             Delete,
         };
     }
+    public static class SkinType
+    {
+        public const string Create = "SkinType.Create";
+        public const string Update = "SkinType.Update";
+        public const string Delete = "SkinType.Delete";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Update,
+            Delete,
+        };
+    }
 }
