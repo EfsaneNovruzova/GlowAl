@@ -1,4 +1,4 @@
 ﻿public interface ICareProductAIService
 {
-    Task<AIRecommendationResult> GetRecommendationsAsync(string userQuery, Guid? userId = null);
+    Task<AiRecommendationResponseDto> GetRecommendationsAsync(string query, Guid? userId = null);
 }
