@@ -13,4 +13,5 @@ public class AppUser : IdentityUser
 
     public ICollection<AIQueryHistory> AIQueryHistories { get; set; } = new List<AIQueryHistory>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }
