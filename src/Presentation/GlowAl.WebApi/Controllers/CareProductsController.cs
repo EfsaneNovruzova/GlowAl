@@ -29,16 +29,20 @@ public class CareProductsController : ControllerBase
     }
     [HttpPost("ai-recommendation")]
     [Authorize] // optional
-    public async Task<IActionResult> GetAIRecommendations([FromBody] AIQueryDto dto)
+    public async Task<IActionResult> GetAIRecommendations([FromBody] AiRecommendationRequestDto dto)
     {
         var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
         Guid? userId = null;
         if (!string.IsNullOrEmpty(userIdStr))
             userId = Guid.Parse(userIdStr);
 
+        // Swagger test üçün userId-dən yox, dto.UserId istifadə oluna bilər
+        if (dto.UserId.HasValue) userId = dto.UserId;
+
         var result = await _careProductAIService.GetRecommendationsAsync(dto.Query, userId);
         return Ok(result);
     }
+
 
     // Update
     [HttpPut("{id:guid}")]

@@ -13,13 +13,16 @@ public class CareProductService : ICareProductService
     private readonly IMapper _mapper;
     private readonly ILogger<CareProductService> _logger;
     private readonly GlowAlDbContext _context;
+    private readonly IAIService _aiService;
 
-    public CareProductService(ICareProductRepository repository, IMapper mapper, ILogger<CareProductService> logger, GlowAlDbContext context)
+
+    public CareProductService(ICareProductRepository repository, IMapper mapper, ILogger<CareProductService> logger, GlowAlDbContext context, IAIService aiService)
     {
         _repository = repository;
         _mapper = mapper;
         _logger = logger;
         _context = context;
+        _aiService = aiService;
     }
 
     public async Task<CareProductGetDto> CreateAsync(CareProductCreateDto dto, string userId)
@@ -145,7 +148,45 @@ public class CareProductService : ICareProductService
 
         return products;
     }
+    public async Task<AiRecommendationResponseDto> GetAiRecommendationAsync(AiRecommendationRequestDto request)
+    {
+        var response = new AiRecommendationResponseDto();
 
+        // DB-də məhsulları tap
+        var products = await _context.CareProducts
+            .Where(p => p.Name.Contains(request.Query) || p.Description.Contains(request.Query))
+            .Select(p => new CareProductGetDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price
+            })
+            .ToListAsync();
 
+        response.RecommendedProducts = products;
+
+        // AI prompt hazırla
+        string aiPrompt;
+        if (products.Any())
+        {
+            aiPrompt = $"İstifadəçiyə '{request.Query}' üçün GlowAl-da mövcud məhsulları sadalayaraq cavab ver:\n";
+            foreach (var p in products)
+            {
+                aiPrompt += $"- {p.Name}: {p.Description}, Qiymət: {p.Price} AZN\n";
+            }
+        }
+        else
+        {
+            aiPrompt = $"İstifadəçiyə '{request.Query}' üçün GlowAl-da məhsul yoxdur, lakin alternativ tövsiyə ver.";
+        }
+
+        // AI cavabı al
+        response.AiResponse = await _aiService.SendMessageAsync(aiPrompt, request.UserId);
+
+        return response;
+    }
 }
+
+
 
