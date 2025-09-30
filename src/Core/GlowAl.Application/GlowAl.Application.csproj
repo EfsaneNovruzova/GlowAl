@@ -18,4 +18,8 @@
     <ProjectReference Include="..\GlowAl.Domain\GlowAl.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\SkinTypeDtos\" />
+  </ItemGroup>
+
 </Project>

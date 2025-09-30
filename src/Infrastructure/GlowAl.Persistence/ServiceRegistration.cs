@@ -1,13 +1,9 @@
 ﻿using GlowAl.Application.Abstracts.Repositories;
 using GlowAl.Application.Abstracts.Services;
-using GlowAl.Application.AI;
-using GlowAl.Domain.Entities;
 using GlowAl.Infrastructure.Services;
 using GlowAl.Persistence.Repositories;
 using GlowAl.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
-
-
 
 public static class ServiceRegistration
 {
@@ -31,8 +27,11 @@ public static class ServiceRegistration
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IFileService, FileService>();
+
+        // ✅ AI services
+        services.AddScoped<IAIQueryHistoryService, AIQueryHistoryService>();
         services.AddHttpClient<IAIService, AIService>();
+
         #endregion
     }
 }
-
