@@ -263,7 +263,7 @@ public class AuthService : IAuthService
     {
         var token = await _usermanager.GenerateEmailConfirmationTokenAsync(appuser);
         var link = $"https://localhost:7241/api/Auth/ConfirmEmail?userId={appuser.Id}&token={HttpUtility.UrlEncode(token)}";
-        Console.WriteLine("Confirm emial"+link);
+        
         return link;
     }
 

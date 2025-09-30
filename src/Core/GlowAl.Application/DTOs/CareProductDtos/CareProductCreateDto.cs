@@ -30,4 +30,5 @@ public class CareProductCreateDto
 
     [Required]
     public Guid CategoryId { get; set; }
+    public List<Guid> SkinProblemIds { get; set; } = new();
 }
