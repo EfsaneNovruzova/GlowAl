@@ -83,6 +83,7 @@ public class CareProductsController : ControllerBase
         return Ok(products);
     }
 
+
     // Optional: My Products (for current seller)
     [HttpGet("my")]
     [Authorize(Roles = "Seller,Admin")]

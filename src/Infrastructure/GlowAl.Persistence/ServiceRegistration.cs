@@ -32,7 +32,8 @@ public static class ServiceRegistration
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ISkinTypeService, SkinTypeService>();
         services.AddScoped<IOrderService, OrderService>();
-       
+        services.AddScoped<IArticleService, ArticleService>();
+
         services.AddScoped<ICareProductAIService, CareProductAIService>();
         services.AddScoped<IAIQueryHistoryService, AIQueryHistoryService>();
         services.AddHttpClient<IAIService, AIService>();
