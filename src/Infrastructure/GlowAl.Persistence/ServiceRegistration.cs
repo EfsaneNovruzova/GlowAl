@@ -29,6 +29,7 @@ public static class ServiceRegistration
         services.AddScoped<ICareProductService, CareProductService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
+        services.AddScoped<IFileService, FileService>();
         #endregion
     }
 }

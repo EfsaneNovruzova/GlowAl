@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using GlowAl.Application.Shared.Helpers;
 using GlowAl.Application;
 using AutoMapper;
+using GlowAl.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddValidatorsFromAssembly(typeof(AppUserRegisterDtoValidator).Assembly);
@@ -57,7 +58,9 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<GlowAlDbContext>()
 .AddDefaultTokenProviders();
-
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings")
+);
 // JWT
 builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
