@@ -27,9 +27,9 @@ public class CareProductConfiguration : IEntityTypeConfiguration<CareProduct>
                .IsRequired(false)
                .HasMaxLength(2000);
 
-        builder.Property(x => x.Price)
-               .HasPrecision(18, 2)
-               .IsRequired();
+        builder.Property(p => p.Price)
+       .HasColumnType("decimal(18,2)")
+       .IsRequired();
 
         builder.HasOne(x => x.SkinType)
                .WithMany(st => st.CareProducts)

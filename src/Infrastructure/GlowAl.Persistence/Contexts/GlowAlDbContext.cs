@@ -20,4 +20,6 @@ public class GlowAlDbContext : IdentityDbContext<AppUser>
     public DbSet<SkinProblem> SkinProblems { get; set; }
     public DbSet<SkinType> SkinTypes { get; set; }
     public DbSet<Favorite> Favorite { get; set; }
+    public DbSet<Order> Order { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 }

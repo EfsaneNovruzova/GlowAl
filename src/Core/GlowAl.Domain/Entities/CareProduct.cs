@@ -22,4 +22,5 @@ public class CareProduct : BaseEntity
     public ICollection<ProductProblem> ProductProblems { get; set; } = new List<ProductProblem>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
     public ICollection<Article> Articles { get; set; } = new List<Article>();
+    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }
