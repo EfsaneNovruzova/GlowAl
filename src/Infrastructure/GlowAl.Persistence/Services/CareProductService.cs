@@ -3,6 +3,7 @@ using GlowAl.Application.Abstracts.Repositories;
 using GlowAl.Application.Abstracts.Services;
 using GlowAl.Application.DTOs.CareProductDtos;
 using GlowAl.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 public class CareProductService : ICareProductService
@@ -110,5 +111,44 @@ public class CareProductService : ICareProductService
             PageSize = filter.PageSize
         };
     }
+    public async Task<List<CareProductGetDto>> GetBySkinProblemsAsync(SkinProblemQueryDto dto)
+    {
+        if (dto.Problems == null || !dto.Problems.Any())
+            return new List<CareProductGetDto>();
+
+        // Keyword matching nümunəsi
+        var matchedProblems = new List<string>();
+        foreach (var problemText in dto.Problems)
+        {
+            if (problemText.ToLower().Contains("yaglidi"))
+                matchedProblems.Add("Yağlı dəri");
+            if (problemText.ToLower().Contains("quru"))
+                matchedProblems.Add("Quru dəri");
+            if (problemText.ToLower().Contains("akne"))
+                matchedProblems.Add("Akne");
+            // istəsən digər keyword-ları əlavə et
+        }
+
+        if (!matchedProblems.Any())
+            return new List<CareProductGetDto>();
+
+        var query = _repository.GetAllFiltered();
+        query = query.Where(cp => cp.ProductProblems
+            .Any(pp => matchedProblems.Contains(pp.SkinProblem.Name)) && cp.Stock > 0);
+
+        var products = await query.ToListAsync();
+
+        return products.Select(p => new CareProductGetDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Brand = p.Brand,
+            Price = p.Price,
+            Stock = p.Stock,
+            ImageUrl = p.ImageUrl
+        }).ToList();
+    }
+
+
 }
 
