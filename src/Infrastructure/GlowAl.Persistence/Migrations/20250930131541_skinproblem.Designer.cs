@@ -4,6 +4,7 @@ using GlowAl.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GlowAl.Persistence.Migrations
 {
     [DbContext(typeof(GlowAlDbContext))]
-    partial class GlowAlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250930131541_skinproblem")]
+    partial class skinproblem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -490,20 +493,15 @@ namespace GlowAl.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Severity")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasDefaultValue("Medium");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -513,30 +511,7 @@ namespace GlowAl.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SkinProblems", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Description = "Yağ balansını tənzimləmək üçün məhsullar",
-                            Name = "Yağlı dəri",
-                            Severity = "Medium"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Description = "Nəmləndirici məhsullar",
-                            Name = "Quru dəri",
-                            Severity = "Medium"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Description = "Akne qarşısı üçün məhsullar",
-                            Name = "Akne",
-                            Severity = "Medium"
-                        });
+                    b.ToTable("SkinProblems");
                 });
 
             modelBuilder.Entity("GlowAl.Domain.Entities.SkinType", b =>
@@ -729,8 +704,7 @@ namespace GlowAl.Persistence.Migrations
 
                     b.HasOne("GlowAl.Domain.Entities.SkinProblem", "SkinProblem")
                         .WithMany("Articles")
-                        .HasForeignKey("SkinProblemId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("SkinProblemId");
 
                     b.HasOne("GlowAl.Domain.Entities.SkinType", "SkinType")
                         .WithMany("Articles")
@@ -829,7 +803,7 @@ namespace GlowAl.Persistence.Migrations
                     b.HasOne("GlowAl.Domain.Entities.SkinProblem", "SkinProblem")
                         .WithMany("ProductProblems")
                         .HasForeignKey("SkinProblemId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CareProduct");
