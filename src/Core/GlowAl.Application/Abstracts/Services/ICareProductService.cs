@@ -11,6 +11,7 @@ public interface ICareProductService
     Task<CareProductGetDto> GetByIdAsync(Guid id);
     Task<PagedResult<CareProductGetDto>> GetAllAsync(CareProductFilter filter);
     Task<List<CareProductGetDto>> GetBySkinProblemsAsync(SkinProblemQueryDto dto);
+    Task<AiRecommendationResponseDto> GetAiRecommendationAsync(AiRecommendationRequestDto request);
 }
 
 
