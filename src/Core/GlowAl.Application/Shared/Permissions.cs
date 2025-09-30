@@ -114,4 +114,20 @@ public class Permissions
             Delete,
         };
     }
+    public static class Order
+    {
+        public const string Create = "Order.Create";
+        public const string Cancel = "Order.Cancel";
+        public const string Pay = "Order.Pay";
+        public const string GetMyOrders = "Order.GetMyOrders";
+
+        public static List<string> All = new()
+        {
+           Create,
+           Cancel,
+           Pay,
+           GetMyOrders
+        };
+    }
+
 }
