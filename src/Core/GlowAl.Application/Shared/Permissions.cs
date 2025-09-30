@@ -90,4 +90,15 @@ public class Permissions
             Delete,
         };
     }
+    public static class AIQueryHistory
+    {
+        public const string Create = "AIQueryHistory.Create";
+        public const string Delete = "AIQueryHistory.my";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Delete,
+        };
+    }
 }
