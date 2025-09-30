@@ -16,6 +16,8 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IFavoriteRepository, FavoriteRepository>();
         services.AddScoped<ISkinTypeRepository, SkinTypeRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
         #endregion
 
         #region Services
@@ -29,7 +31,9 @@ public static class ServiceRegistration
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ISkinTypeService, SkinTypeService>();
+        services.AddScoped<IOrderService, OrderService>();
        
+
         services.AddScoped<IAIQueryHistoryService, AIQueryHistoryService>();
         services.AddHttpClient<IAIService, AIService>();
 
