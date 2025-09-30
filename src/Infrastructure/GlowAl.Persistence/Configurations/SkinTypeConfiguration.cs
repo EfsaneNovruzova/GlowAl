@@ -4,31 +4,29 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GlowAl.Persistence.Configurations
 {
-    public class SkinProblemConfiguration : IEntityTypeConfiguration<SkinProblem>
+    public class SkinTypeConfiguration : IEntityTypeConfiguration<SkinType>
     {
-        public void Configure(EntityTypeBuilder<SkinProblem> builder)
+        public void Configure(EntityTypeBuilder<SkinType> builder)
         {
-            builder.HasKey(sp => sp.Id);
-            builder.Property(sp => sp.Name)
-                   .IsRequired()
-                   .HasMaxLength(150);
+            builder.ToTable("SkinTypes");
 
-            builder.Property(sp => sp.Description)
+            // Primary Key
+            builder.HasKey(st => st.Id);
+
+            // Properties
+            builder.Property(st => st.Name)
                    .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.Property(st => st.Description)
+                   .IsRequired(false)
                    .HasMaxLength(1000);
 
-            builder.Property(sp => sp.Severity)
-                   .IsRequired()
-                   .HasMaxLength(20)
-                   .HasDefaultValue("Medium");
-            builder.HasMany(sp => sp.ProductProblems)
-                   .WithOne(pp => pp.Problem)
-                   .HasForeignKey(pp => pp.ProblemId)
-                   .OnDelete(DeleteBehavior.Restrict);
-            builder.HasMany(sp => sp.Articles)
-                   .WithOne(a => a.SkinProblem)
-                   .HasForeignKey(a => a.SkinProblemId)
-                   .OnDelete(DeleteBehavior.Restrict);
+            // Relation with CareProduct (One-to-Many)
+            builder.HasMany(st => st.CareProducts)
+                   .WithOne(cp => cp.SkinType)
+                   .HasForeignKey(cp => cp.SkinTypeId)
+                   .OnDelete(DeleteBehavior.SetNull); // Əgər SkinType silinsə, CareProduct-un SkinTypeId null olur
         }
     }
 }

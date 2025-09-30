@@ -13,6 +13,9 @@
     public Guid? SkinTypeId { get; set; }
     public Guid CategoryId { get; set; }
     public string CreatedByUserId { get; set; } = null!;
+
+    public List<Guid> SkinProblemIds { get; set; } = new();
+    public List<string> SkinProblemNames { get; set; } = new();
 }
 
 

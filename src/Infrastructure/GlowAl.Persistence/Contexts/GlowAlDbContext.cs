@@ -1,4 +1,5 @@
 ﻿using GlowAl.Domain.Entities;
+using GlowAl.Persistence.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +10,13 @@ public class GlowAlDbContext : IdentityDbContext<AppUser>
     public GlowAlDbContext( DbContextOptions<GlowAlDbContext> options):base(options)
     {  
     }
-    
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new SkinProblemConfiguration());
+    }
     public DbSet<Article>  Articles { get; set; }
     public DbSet<AIQueryHistory> AIQueryHistories { get; set; }
     public DbSet<CareProduct> CareProducts { get; set; }

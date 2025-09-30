@@ -2,9 +2,9 @@
 
 public class ProductProblem :BaseEntity
 {
-    public Guid ProductId { get; set; }
-    public CareProduct Product { get; set; } = null!;
+    public Guid CareProductId { get; set; }
+    public CareProduct CareProduct { get; set; } = null!;
 
-    public Guid ProblemId { get; set; }
-    public SkinProblem Problem { get; set; } = null!;
+    public Guid SkinProblemId { get; set; }
+    public SkinProblem SkinProblem { get; set; } = null!;
 }
