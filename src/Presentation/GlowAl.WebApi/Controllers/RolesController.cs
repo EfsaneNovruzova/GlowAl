@@ -35,7 +35,7 @@ namespace GlowAl.WebApi.Controllers
                 return StatusCode((int)result.StatusCode, result);
             }
 
-            // GET: api/roles/permissions
+           
             [HttpGet("permissions")]
             public IActionResult GetAllPermissions()
             {
