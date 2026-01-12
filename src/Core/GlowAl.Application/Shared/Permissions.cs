@@ -90,4 +90,44 @@ public class Permissions
             Delete,
         };
     }
+    public static class AIQueryHistory
+    {
+        public const string Create = "AIQueryHistory.Create";
+        public const string Delete = "AIQueryHistory.my";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Delete,
+        };
+    }
+    public static class SkinType
+    {
+        public const string Create = "SkinType.Create";
+        public const string Update = "SkinType.Update";
+        public const string Delete = "SkinType.Delete";
+
+        public static List<string> All = new()
+        {
+            Create,
+            Update,
+            Delete,
+        };
+    }
+    public static class Order
+    {
+        public const string Create = "Order.Create";
+        public const string Cancel = "Order.Cancel";
+        public const string Pay = "Order.Pay";
+        public const string GetMyOrders = "Order.GetMyOrders";
+
+        public static List<string> All = new()
+        {
+           Create,
+           Cancel,
+           Pay,
+           GetMyOrders
+        };
+    }
+
 }

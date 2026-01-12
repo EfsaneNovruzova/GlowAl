@@ -2,6 +2,7 @@
 using GlowAl.Application.DTOs.CareProductDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 
 [ApiController]
@@ -9,10 +10,12 @@ using System.Security.Claims;
 public class CareProductsController : ControllerBase
 {
     private readonly ICareProductService _service;
+    private readonly ICareProductAIService _careProductAIService;
 
-    public CareProductsController(ICareProductService service)
+    public CareProductsController(ICareProductService service, ICareProductAIService careProductAIService)
     {
         _service = service;
+        _careProductAIService = careProductAIService;
     }
 
     // Create
@@ -24,6 +27,22 @@ public class CareProductsController : ControllerBase
         var result = await _service.CreateAsync(dto, userId);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
+    [HttpPost("ai-recommendation")]
+    [Authorize] // optional
+    public async Task<IActionResult> GetAIRecommendations([FromBody] AiRecommendationRequestDto dto)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        Guid? userId = null;
+        if (!string.IsNullOrEmpty(userIdStr))
+            userId = Guid.Parse(userIdStr);
+
+        // Swagger test üçün userId-dən yox, dto.UserId istifadə oluna bilər
+        if (dto.UserId.HasValue) userId = dto.UserId;
+
+        var result = await _careProductAIService.GetRecommendationsAsync(dto.Query, userId);
+        return Ok(result);
+    }
+
 
     // Update
     [HttpPut("{id:guid}")]
@@ -60,6 +79,14 @@ public class CareProductsController : ControllerBase
         var result = await _service.GetAllAsync(filter);
         return Ok(result);
     }
+    [HttpPost("by-skin-problem")]
+    [ProducesResponseType(typeof(List<CareProductGetDto>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetBySkinProblems([FromBody] SkinProblemQueryDto dto)
+    {
+        var products = await _service.GetBySkinProblemsAsync(dto);
+        return Ok(products);
+    }
+
 
     // Optional: My Products (for current seller)
     [HttpGet("my")]
@@ -78,6 +105,8 @@ public class CareProductsController : ControllerBase
             PageSize = filter.PageSize
         });
     }
+
+
 }
 
 

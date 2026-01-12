@@ -8,7 +8,7 @@ public class AIQueryHistoryConfiguration : IEntityTypeConfiguration<AIQueryHisto
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.ProductName)
+            builder.Property(x => x.Prompt)
                    .IsRequired()
                    .HasMaxLength(200);
 

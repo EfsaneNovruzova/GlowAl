@@ -20,15 +20,15 @@ public class CareProductConfiguration : IEntityTypeConfiguration<CareProduct>
                .HasMaxLength(100);
 
         builder.Property(x => x.Description)
-               .IsRequired(false) 
+               .IsRequired(false)
                .HasMaxLength(1000);
 
         builder.Property(x => x.Ingredients)
                .IsRequired(false)
                .HasMaxLength(2000);
 
-        builder.Property(x => x.Price)
-               .HasPrecision(18, 2)
+        builder.Property(p => p.Price)
+               .HasColumnType("decimal(18,2)")
                .IsRequired();
 
         builder.HasOne(x => x.SkinType)
@@ -36,24 +36,25 @@ public class CareProductConfiguration : IEntityTypeConfiguration<CareProduct>
                .HasForeignKey(x => x.SkinTypeId)
                .OnDelete(DeleteBehavior.SetNull);
 
-       
         builder.HasOne(x => x.Category)
                .WithMany(c => c.Products)
                .HasForeignKey(x => x.CategoryId)
                .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(x => x.Reviews)
                .WithOne(r => r.Product)
                .HasForeignKey(r => r.ProductId)
                .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(x => x.ProductProblems)
-               .WithOne(pp => pp.Product)
-               .HasForeignKey(pp => pp.ProductId)
+               .WithOne(pp => pp.CareProduct)
+               .HasForeignKey(pp => pp.CareProductId)
                .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(x => x.Articles)
                .WithOne(a => a.Product)
                .HasForeignKey(a => a.ProductId)
                .OnDelete(DeleteBehavior.Restrict);
     }
 }
-
 

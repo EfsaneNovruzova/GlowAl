@@ -1,24 +1,27 @@
 ﻿using GlowAl.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace GlowAl.Persistence.Configurations;
+using Microsoft.EntityFrameworkCore;
 
 public class ProductProblemConfiguration : IEntityTypeConfiguration<ProductProblem>
 {
     public void Configure(EntityTypeBuilder<ProductProblem> builder)
     {
+        builder.ToTable("ProductProblems");
+
+        // Primary key artıq BaseEntity.Id-dən gəlir
         builder.HasKey(pp => pp.Id);
 
-        builder.HasOne(pp => pp.Product)
+        // Relations
+        builder.HasOne(pp => pp.CareProduct)
                .WithMany(p => p.ProductProblems)
-               .HasForeignKey(pp => pp.ProductId)
+               .HasForeignKey(pp => pp.CareProductId)
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(pp => pp.Problem)
-               .WithMany(p => p.ProductProblems)
-               .HasForeignKey(pp => pp.ProblemId)
+        builder.HasOne(pp => pp.SkinProblem)
+               .WithMany(sp => sp.ProductProblems)
+               .HasForeignKey(pp => pp.SkinProblemId)
                .OnDelete(DeleteBehavior.Restrict);
     }
 }
+
 

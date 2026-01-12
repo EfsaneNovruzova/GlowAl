@@ -7,4 +7,5 @@ namespace GlowAl.Application.Abstracts.Repositories;
 
 public interface ICareProductRepository : IRepository<CareProduct>
 {
+    IQueryable<CareProduct> GetAllFiltered();
 }
