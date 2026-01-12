@@ -34,7 +34,7 @@ namespace GlowAl.Persistence.Migrations
                     b.Property<string>("CreatedUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductName")
+                    b.Property<string>("Prompt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -325,7 +325,45 @@ namespace GlowAl.Persistence.Migrations
                     b.ToTable("Favorite");
                 });
 
-            modelBuilder.Entity("GlowAl.Domain.Entities.ProductProblem", b =>
+            modelBuilder.Entity("GlowAl.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("GlowAl.Domain.Entities.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,10 +375,49 @@ namespace GlowAl.Persistence.Migrations
                     b.Property<string>("CreatedUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProblemId")
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("GlowAl.Domain.Entities.ProductProblem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CareProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SkinProblemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -351,9 +428,9 @@ namespace GlowAl.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProblemId");
+                    b.HasIndex("CareProductId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("SkinProblemId");
 
                     b.ToTable("ProductProblems");
                 });
@@ -413,15 +490,20 @@ namespace GlowAl.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Severity")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Medium");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -431,7 +513,30 @@ namespace GlowAl.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SkinProblems");
+                    b.ToTable("SkinProblems", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Description = "Yağ balansını tənzimləmək üçün məhsullar",
+                            Name = "Yağlı dəri",
+                            Severity = "Medium"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Description = "Nəmləndirici məhsullar",
+                            Name = "Quru dəri",
+                            Severity = "Medium"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Description = "Akne qarşısı üçün məhsullar",
+                            Name = "Akne",
+                            Severity = "Medium"
+                        });
                 });
 
             modelBuilder.Entity("GlowAl.Domain.Entities.SkinType", b =>
@@ -624,7 +729,8 @@ namespace GlowAl.Persistence.Migrations
 
                     b.HasOne("GlowAl.Domain.Entities.SkinProblem", "SkinProblem")
                         .WithMany("Articles")
-                        .HasForeignKey("SkinProblemId");
+                        .HasForeignKey("SkinProblemId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("GlowAl.Domain.Entities.SkinType", "SkinType")
                         .WithMany("Articles")
@@ -682,23 +788,53 @@ namespace GlowAl.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GlowAl.Domain.Entities.ProductProblem", b =>
+            modelBuilder.Entity("GlowAl.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("GlowAl.Domain.Entities.SkinProblem", "Problem")
-                        .WithMany("ProductProblems")
-                        .HasForeignKey("ProblemId")
+                    b.HasOne("GlowAl.Domain.Entities.AppUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GlowAl.Domain.Entities.OrderItem", b =>
+                {
+                    b.HasOne("GlowAl.Domain.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GlowAl.Domain.Entities.CareProduct", "Product")
-                        .WithMany("ProductProblems")
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Problem");
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GlowAl.Domain.Entities.ProductProblem", b =>
+                {
+                    b.HasOne("GlowAl.Domain.Entities.CareProduct", "CareProduct")
+                        .WithMany("ProductProblems")
+                        .HasForeignKey("CareProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GlowAl.Domain.Entities.SkinProblem", "SkinProblem")
+                        .WithMany("ProductProblems")
+                        .HasForeignKey("SkinProblemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CareProduct");
+
+                    b.Navigation("SkinProblem");
                 });
 
             modelBuilder.Entity("GlowAl.Domain.Entities.Review", b =>
@@ -775,12 +911,16 @@ namespace GlowAl.Persistence.Migrations
                 {
                     b.Navigation("AIQueryHistories");
 
+                    b.Navigation("Orders");
+
                     b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("GlowAl.Domain.Entities.CareProduct", b =>
                 {
                     b.Navigation("Articles");
+
+                    b.Navigation("OrderItems");
 
                     b.Navigation("ProductProblems");
 
@@ -792,6 +932,11 @@ namespace GlowAl.Persistence.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("GlowAl.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("GlowAl.Domain.Entities.SkinProblem", b =>

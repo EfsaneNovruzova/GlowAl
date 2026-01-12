@@ -1,13 +1,9 @@
 ﻿using GlowAl.Application.Abstracts.Repositories;
 using GlowAl.Application.Abstracts.Services;
-using GlowAl.Application.AI;
-using GlowAl.Domain.Entities;
 using GlowAl.Infrastructure.Services;
 using GlowAl.Persistence.Repositories;
 using GlowAl.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
-
-
 
 public static class ServiceRegistration
 {
@@ -19,6 +15,9 @@ public static class ServiceRegistration
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+        services.AddScoped<ISkinTypeRepository, SkinTypeRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderItemRepository, OrderItemRepository>();
         #endregion
 
         #region Services
@@ -31,8 +30,15 @@ public static class ServiceRegistration
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<ISkinTypeService, SkinTypeService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<CareProductService>();
+        services.AddScoped<ICareProductAIService, CareProductAIService>();
+        services.AddScoped<IAIQueryHistoryService, AIQueryHistoryService>();
         services.AddHttpClient<IAIService, AIService>();
+
+
         #endregion
     }
 }
-

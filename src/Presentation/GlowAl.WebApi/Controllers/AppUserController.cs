@@ -4,6 +4,7 @@ using GlowAl.Application.Shared.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace GlowAl.WebApi.Controllers
 {
@@ -38,15 +39,16 @@ namespace GlowAl.WebApi.Controllers
             return Ok(user);
         }
 
-        // Hazırda daxil olmuş istifadəçini gətir
         [HttpGet("current")]
         public async Task<ActionResult<AppUserGetDto>> GetCurrentUser()
         {
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; // buranı dəyişdik
             if (userId == null) return Unauthorized();
+
             var user = await _appUserService.GetCurrentUserAsync(userId);
             return Ok(user);
         }
+
 
         // İstifadəçinin rollarını göstər (Admin / Moderator)
         [HttpGet("{userId}/roles")]

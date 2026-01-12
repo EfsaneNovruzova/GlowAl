@@ -1,10 +1,5 @@
-﻿using System.Threading.Tasks;
-
-namespace GlowAl.Application.AI
+﻿public interface IAIService
 {
-    public interface IAIService
-    {
-        Task<string> SendMessageAsync(string prompt);
-    }
+    Task<string> SendMessageAsync(string prompt, Guid? userId = null);
 }
 
